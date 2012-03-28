@@ -21,6 +21,7 @@ OptionsApplied:
 
 #include func_mousemoveresize.ahk
 #include func_mouserollup2.ahk
+#include func_titlebarwheels.ahk
 #include func_titlebarclicks.ahk
 
 #include func_keyboardresize.ahk
