@@ -41,6 +41,8 @@ Iniread, SESnap, %A_Scriptdir%\secondshell.ini, AppHotkeys, SESnap
 Hotkey, %SESnap%, SESnap
 Iniread, FullSnap, %A_Scriptdir%\secondshell.ini, AppHotkeys, FullSnap
 Hotkey, %FullSnap%, FullSnap
+Iniread, DualSnap, %A_Scriptdir%\secondshell.ini, AppHotkeys, DualSnap
+Hotkey, %DualSnap%, DualSnap
 }
 
 Iniread, EnableMouseMoveResize, %A_Scriptdir%\secondshell.ini, AppHotkeys, EnableMouseMoveResize

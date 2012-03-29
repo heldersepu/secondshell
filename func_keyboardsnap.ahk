@@ -42,7 +42,12 @@ FullSnap:
 action=Full
 gosub SnapDecision
 return
-	
+
+DualSnap:
+action=Dual
+gosub SnapDecision
+return
+
 SnapDecision:
 WinGet, ActPid, PID, A
 WinGet, ActId, ID, A
@@ -59,17 +64,17 @@ IfEqual, ActClass, CabinetWclass
 	gosub SnapGeometrics
 	return
 	}
-OR  (stilus & 0x40000) AND (ActPid <> ExpPid) 
+OR  (stilus & 0x40000) AND (ActPid <> ExpPid)
 	{
 ;	IfNotInString, ActClass, SideBar
 	If ActClass not contains ROCKET,SideBar,TrueLaunch,AutoHotkeyGUI
-	{	
+	{
 	gosub SnapGeometrics
 	}
 	return
 	}
 return
-	
+
 SnapGeometrics:
 SysGet, Mon1, MonitorWorkArea, 1
 SysGet, Mon2, MonitorWorkArea, 2
@@ -83,181 +88,186 @@ WinGetPos, ActX, ActY, ActW, ActH, ahk_id %ActId%
 
 	If Snap%ActId% <1
 	{
-	X00%ActId% := ActX
-	Y00%ActId% := ActY
-	W00%ActId% := ActW
-	H00%ActId% := ActH
-	Snap%ActId%=0
+		X00%ActId% := ActX
+		Y00%ActId% := ActY
+		W00%ActId% := ActW
+		H00%ActId% := ActH
+		Snap%ActId%=0
 	}
 	;msgbox % ActX " " ActW
-	
+
 	XOffset=0
-		
-	
+
 	setformat, float, 0.0
 	Offset:=(SM_CXMAXIMIZED-(Mon1Right-Mon1Left))/2
-	
-	
-	
+
 	If (MaxState%ActId% = 1 and  ActX=Mon1Left-Offset)
 	{
-	XOffset := Offset
+		XOffset := Offset
 	}
-	
+
 	If (MaxState%ActId% = 1 and  ActX=Mon2Left-Offset)
 	{
-	XOffset := Offset
-	}	
-	
-	If (ActX >= Mon1Left-XOffset and ActX < Mon1Right-XOffset) ;primary monitor
-		{
-		Top := Mon1Top
-		Left := Mon1Left
-		Height := Mon1Bottom-Mon1Top
-		Width := Mon1Right-Mon1Left
-		
-	
-		If action=Right
-			{
-			Snap%ActId% := Snap%ActId%+1
-			Left := Width/2
-			Width := Width/2
-			gosub Snapper
-			}		
-		If action=Left
-			{
-			Snap%ActId% := Snap%ActId%+10
-			Width := Width/2
-			gosub Snapper
-			}		
-		If action=Top
-			{
-			Snap%ActId% := Snap%ActId%+100
-			Height := Height/2
-			gosub Snapper
-			}		
-		If action=Bottom
-			{
-			Snap%ActId% := Snap%ActId%+1000
-			Top := Height/2+Top
-			Height := Height/2
-			gosub Snapper
-			}			
-		If action=NW
-			{
-			Snap%ActId% := Snap%ActId%+10000
-			Width := Width/2
-			Height := Height/2
-			gosub Snapper
-			}	
-		If action=NE
-			{
-			Snap%ActId% := Snap%ActId%+100000
-			Left := Width/2
-			Width := Width/2
-			Height := Height/2
-			gosub Snapper
-			}	
-		If action=SW
-			{
-			Snap%ActId% := Snap%ActId%+1000000
-			Width := Width/2
-			Top := Height/2+Top
-			Height := Height/2
-			gosub Snapper
-			}	
-		If action=SE
-			{
-			Snap%ActId% := Snap%ActId%+10000000
-			Left := Width/2
-			Top := Height/2+Top
-			Width := Width/2
-			Height := Height/2
-			gosub Snapper
-			}	
+		XOffset := Offset
+	}
 
-		If action=Full
-			{
-			Snap%ActId% := Snap%ActId%+100000000
-			gosub Snapper
-			}
-			
-		}
-		
-		If (ActX >= Mon2Left-XOffset and ActX<Mon2Right-XOffset) ;secondary monitor
-		{
-		Top := Mon2Top
+	If action=Dual
+	{
+		Top := Mon1Top
 		Left := Mon2Left
-		Height := Mon2Bottom-Mon2Top
-		Width := Mon2Right-Mon2Left
-		
+		Height := Mon1Bottom-Mon1Top
+		Width := Mon1Right-Mon1Left + Mon2Right-Mon2Left
+		Snap%ActId% := Snap%ActId%+1000000000
+		gosub Snapper
+	}
+	else
+	{
+
+		If (ActX >= Mon1Left-XOffset and ActX < Mon1Right-XOffset) ;primary monitor
+		{
+			Top := Mon1Top
+			Left := Mon1Left
+			Height := Mon1Bottom-Mon1Top
+			Width := Mon1Right-Mon1Left
+
 			If action=Right
 			{
-			Snap%ActId% := Snap%ActId%+1
-			Left := Mon2Left+((Mon2Right-Mon2Left)/2)
-			Width:= (Mon2Right-Mon2Left)/2
-			gosub Snapper
-			}		
+				Snap%ActId% := Snap%ActId%+1
+				Left := Width/2
+				Width := Width/2
+				gosub Snapper
+			}
 			If action=Left
 			{
-			Snap%ActId% := Snap%ActId%+10
-			Width:= (Mon2Right-Mon2Left)/2
-			gosub Snapper
-			}		
+				Snap%ActId% := Snap%ActId%+10
+				Width := Width/2
+				gosub Snapper
+			}
 			If action=Top
 			{
-			Snap%ActId% := Snap%ActId%+100
-			Height := (Mon2Bottom-Mon2Top)/2
-			gosub Snapper
-			}		
+				Snap%ActId% := Snap%ActId%+100
+				Height := Height/2
+				gosub Snapper
+			}
 			If action=Bottom
 			{
-			Snap%ActId% := Snap%ActId%+1000
-			Top := (Mon2Bottom-Mon2Top)/2+Top
-			Height := (Mon2Bottom-Mon2Top)/2
-			gosub Snapper
-			}			
+				Snap%ActId% := Snap%ActId%+1000
+				Top := Height/2+Top
+				Height := Height/2
+				gosub Snapper
+			}
 			If action=NW
 			{
-			Snap%ActId% := Snap%ActId%+10000
-			Width := (Mon2Right-Mon2Left)/2
-			Height := (Mon2Bottom-Mon2Top)/2
-			gosub Snapper
-			}	
+				Snap%ActId% := Snap%ActId%+10000
+				Width := Width/2
+				Height := Height/2
+				gosub Snapper
+			}
 			If action=NE
 			{
-			Snap%ActId% := Snap%ActId%+100000
-			Left := Mon2Left+((Mon2Right-Mon2Left)/2)
-			Width:= (Mon2Right-Mon2Left)/2
-			Height := (Mon2Bottom-Mon2Top)/2
-			gosub Snapper
-			}	
+				Snap%ActId% := Snap%ActId%+100000
+				Left := Width/2
+				Width := Width/2
+				Height := Height/2
+				gosub Snapper
+			}
 			If action=SW
 			{
-			Snap%ActId% := Snap%ActId%+1000000
-			Width := (Mon2Right-Mon2Left)/2
-			Top := (Mon2Bottom-Mon2Top)/2+Top
-			Height := (Mon2Bottom-Mon2Top)/2
-			gosub Snapper
-			}	
+				Snap%ActId% := Snap%ActId%+1000000
+				Width := Width/2
+				Top := Height/2+Top
+				Height := Height/2
+				gosub Snapper
+			}
 			If action=SE
 			{
-			Snap%ActId% := Snap%ActId%+10000000
-			Left := Mon2Left+((Mon2Right-Mon2Left)/2)
-			Top := (Mon2Bottom-Mon2Top)/2+Top
-			Width := (Mon2Right-Mon2Left)/2
-			Height := (Mon2Bottom-Mon2Top)/2
-			gosub Snapper
-			}	
-			
+				Snap%ActId% := Snap%ActId%+10000000
+				Left := Width/2
+				Top := Height/2+Top
+				Width := Width/2
+				Height := Height/2
+				gosub Snapper
+			}
 			If action=Full
 			{
-			Snap%ActId% := Snap%ActId%+100000000
-			gosub Snapper
+				Snap%ActId% := Snap%ActId%+100000000
+				gosub Snapper
 			}
-		
 		}
-				
+
+		If (ActX >= Mon2Left-XOffset and ActX<Mon2Right-XOffset) ;secondary monitor
+		{
+			Top := Mon2Top
+			Left := Mon2Left
+			Height := Mon2Bottom-Mon2Top
+			Width := Mon2Right-Mon2Left
+
+			If action=Right
+			{
+				Snap%ActId% := Snap%ActId%+1
+				Left := Mon2Left+((Mon2Right-Mon2Left)/2)
+				Width:= (Mon2Right-Mon2Left)/2
+				gosub Snapper
+			}
+			If action=Left
+			{
+				Snap%ActId% := Snap%ActId%+10
+				Width:= (Mon2Right-Mon2Left)/2
+				gosub Snapper
+			}
+			If action=Top
+			{
+				Snap%ActId% := Snap%ActId%+100
+				Height := (Mon2Bottom-Mon2Top)/2
+				gosub Snapper
+			}
+			If action=Bottom
+			{
+				Snap%ActId% := Snap%ActId%+1000
+				Top := (Mon2Bottom-Mon2Top)/2+Top
+				Height := (Mon2Bottom-Mon2Top)/2
+				gosub Snapper
+			}
+			If action=NW
+			{
+				Snap%ActId% := Snap%ActId%+10000
+				Width := (Mon2Right-Mon2Left)/2
+				Height := (Mon2Bottom-Mon2Top)/2
+				gosub Snapper
+			}
+			If action=NE
+			{
+				Snap%ActId% := Snap%ActId%+100000
+				Left := Mon2Left+((Mon2Right-Mon2Left)/2)
+				Width:= (Mon2Right-Mon2Left)/2
+				Height := (Mon2Bottom-Mon2Top)/2
+				gosub Snapper
+			}
+			If action=SW
+			{
+				Snap%ActId% := Snap%ActId%+1000000
+				Width := (Mon2Right-Mon2Left)/2
+				Top := (Mon2Bottom-Mon2Top)/2+Top
+				Height := (Mon2Bottom-Mon2Top)/2
+				gosub Snapper
+			}
+			If action=SE
+			{
+				Snap%ActId% := Snap%ActId%+10000000
+				Left := Mon2Left+((Mon2Right-Mon2Left)/2)
+				Top := (Mon2Bottom-Mon2Top)/2+Top
+				Width := (Mon2Right-Mon2Left)/2
+				Height := (Mon2Bottom-Mon2Top)/2
+				gosub Snapper
+			}
+			If action=Full
+			{
+				Snap%ActId% := Snap%ActId%+100000000
+				gosub Snapper
+			}
+		}
+	}
+
 return
 
 Snapper:
@@ -285,6 +295,5 @@ else
 		WinRestore, ahk_id %ActId%
 	}
 	WinMove,ahk_id %ActId%,,%Left%,%Top%,%Width%,%Height%
-	
 }
 return
