@@ -23,12 +23,13 @@
 @COPY setup\setup.* .
 SET Ahk2Exe="%ProgramFiles%\AutoHotkey\Compiler\Ahk2Exe.exe"
 IF NOT EXIST %Ahk2Exe% SET Ahk2Exe="%ProgramFiles(x86)%\AutoHotkey\Compiler\Ahk2Exe.exe"
-CALL %Ahk2Exe%  /in "secondshell.ahk" /icon "icons\active.ico" 
+CALL %Ahk2Exe%  /in "secondshell.ahk" /icon "icons\active.ico"
 
-:: Few seconds delay 
+:: Few seconds delay
 @COLOR F0
 @ECHO.
-@PING 1.1 /n 2 /i 1 > NUL
+@ECHO   secondshell.exe created
+@PING 1.1 /n 4 /i 1 > NUL
 @COLOR 03
 
 :: Launch the NSIS setup
