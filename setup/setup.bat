@@ -2,7 +2,7 @@
 :: Make the installer using NSIS
 
 :: Tested with:
-::  python-2.7.msi
+::  AutoHotkey - version 1.0.48.05
 ::  nsis-2.46-setup.exe
 ::  http://nsis.sourceforge.net/KillProc_plug-in
 
