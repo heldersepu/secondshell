@@ -1,0 +1,1 @@
+SecondShell is a free portable software, providing useful enhancements for the Windows shell with some extra help to netbook users.
